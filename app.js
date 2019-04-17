@@ -7,6 +7,7 @@ const video = document.querySelector('.vid-container video');
 const sounds = document.querySelectorAll('.sound-picker button');
 //   Time Display
 const timeDisplay = document.querySelector('.time-display');
+const timeSelect = document.querySelectorAll('.time-select button');
 //   get the length of the outline
 const outlineLength = outine.getTotalLength();
 //   Duration
@@ -15,9 +16,28 @@ let fakeDuration = 600;
 outline.style.strokeDasharray = outlineLength;
 outline.style.strokeDashoffset = outlineLength;
 
+// Pick Different Sounds
+sounds.forEach(sounds => {
+  sounds.addEventListener('click', function() {
+    song.src = this.getAttribute('data-sound');
+    video.src = this.getAttribute('data-video');
+    checkPlaying(song);
+  });
+});
+
 //   Play sound
 play.addEventListener('click', () => {
   checkPlaying();
+});
+
+// Select Sound
+timeSelect.forEach(option => {
+  option.addEventListener('click', function() {
+    fakeDuration = this.getAttribute('data-time');
+    timeDisplay.textContent = `${Math.floor(fakeDuration / 60)}:${Math.floor(
+      fakeDuration % 60
+    )}`;
+  });
 });
 
 //   Stop and play sounds
@@ -46,4 +66,11 @@ song.ontimeupdate = () => {
 
   //   Animate Text
   timeDisplay.textContent = `${minutes}:${seconds}`;
+
+  if (currentTime >= fakeDuration) {
+    song.pause();
+    song.currentTime;
+    play.src = './svg/play.svg';
+    video.pause();
+  }
 };
